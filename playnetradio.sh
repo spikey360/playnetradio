@@ -1,7 +1,7 @@
 list="stations.list"
 if [ ! -f $list ]
 then
-echo "Fill" $list "in format <name;url>"
+echo -e "Fill" $list "in format \e[1m<name;url>\e[0m"
 echo > $list
 exit 1
 fi
@@ -10,19 +10,19 @@ while getopts "a" opts
 do
 	case $opts in
 		a)
-			echo "Station?"
+			echo -e "\e[36mStation?\e[0m"
 			read add_station
-			echo "URL?"
+			echo -e "\e[36mURL?\e[0m"
 			read add_url
 			echo "$add_station;$add_url" >> $list
-			echo "Added" $add_station
+			echo -e "\e[36m\e[1mAdded\e[0m" $add_station
 			exit 0
 			;;
 	esac
 done
 shift $(($OPTIND-1))
 #print station list
-echo "................Stations................"
+echo -e "................\e[1mStations\e[0m................"
 #cat stations.list
 while IFS= read -r line
 do
@@ -46,10 +46,10 @@ fi
 done < "$list"
 if [ $flag -eq 0 ]
 then
-echo "Invalid.."
+echo -e "\e[31mInvalid..\e[0m"
 exit 1
 fi
 #All in order, play
-echo "Playing" $url
+echo -e "Playing \e[1m" $url "\e[0m"
 cvlc $url
-echo "Done playing net radio"
+echo -e "\n" "\e[1mDone playing net radio\e[0m"
