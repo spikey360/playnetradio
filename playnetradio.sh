@@ -5,8 +5,9 @@ echo -e "Fill" $list "in format \e[1m<name;url>\e[0m"
 echo > $list
 exit 1
 fi
+flags=""
 #options to add
-while getopts "a" opts
+while getopts "aq" opts
 do
 	case $opts in
 		a)
@@ -18,6 +19,11 @@ do
 			echo -e "\e[36m\e[1mAdded\e[0m" $add_station
 			exit 0
 			;;
+		q)
+			#quiet mode
+			echo "Quiet mode selected.."
+			flags=-q
+
 	esac
 done
 shift $(($OPTIND-1))
@@ -31,7 +37,7 @@ test=($line)
 echo -e "\t>" "${test[0]}"
 done < "$list"
 echo "........................................"
-echo "Station?"
+echo -e "\e[1m\e[36mStation?\e[0m"
 read station
 flag=0
 while IFS= read -r line
@@ -51,5 +57,5 @@ exit 1
 fi
 #All in order, play
 echo -e "Playing \e[1m" $url "\e[0m"
-cvlc $url
+cvlc $flags $url
 echo -e "\n" "\e[1mDone playing net radio\e[0m"
