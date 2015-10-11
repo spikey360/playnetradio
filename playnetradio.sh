@@ -56,7 +56,7 @@ while IFS= read -r line
 do
 IFS=";"
 test=($line)
-if [ "${test[1]}" = $station ]
+if [ "${test[1]}" = "$station" ]
 then
 flag=1
 url="${test[2]}"
@@ -64,7 +64,8 @@ fi
 done < "$list"
 if [ $flag -eq 0 ]
 then
-echo -e "\e[31mInvalid..\e[0m"
+echo -e "\e[31mInvalid, Exiting..\e[0m"
+rm $tmplist
 exit 1
 fi
 #All in order, play
