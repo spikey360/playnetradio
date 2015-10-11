@@ -1,5 +1,6 @@
 list="stations.list"
 tmplist=".tmplist"
+cplist=".cplist"
 if [ ! -f $list ]
 then
 echo -e "Fill" $list "in format \e[1m<genre;name;url>\e[0m"
@@ -9,8 +10,9 @@ fi
 #Initialise variables
 genre=""
 flags=""
+delete=0
 #options to add
-while getopts "aq" opts
+while getopts "aqd" opts
 do
 	case $opts in
 		a)
@@ -28,6 +30,12 @@ do
 			#quiet mode
 			echo "Quiet mode selected.."
 			flags=-q
+			;;
+		d)
+			#station delete mode
+			echo "Station delete mode.."
+			delete=1
+			;;
 
 	esac
 done
@@ -68,9 +76,18 @@ echo -e "\e[31mInvalid, Exiting..\e[0m"
 rm $tmplist
 exit 1
 fi
-#All in order, play
+#All in order, play or delete
+if [ "$delete" == "1" ]
+then
+echo -e "\e[31m\e[1mDeleting\e[0m\e[1m" $station "\e[0m"
+cp $list .cplist
+rm $list
+(cat $cplist | grep -v $station) | cat > $list
+rm $cplist
+else
 echo -e "Playing \e[1m" $url "\e[0m"
 cvlc $flags $url
 echo -e "\n" "\e[1mDone playing net radio\e[0m"
+fi
 #cleanup
 rm $tmplist
